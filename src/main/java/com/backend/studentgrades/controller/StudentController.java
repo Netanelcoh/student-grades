@@ -1,14 +1,19 @@
 package com.backend.studentgrades.controller;
 
-import com.backend.studentgrades.model.Student;
-import com.backend.studentgrades.model.StudentIn;
+import com.backend.studentgrades.model.*;
 import com.backend.studentgrades.repo.StudentService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Min;
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/students")
@@ -18,10 +23,20 @@ public class StudentController {
     StudentService studentService;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<?> getAllStudents()
-    {
-        return new ResponseEntity<>(studentService.all(), HttpStatus.OK);
+    public ResponseEntity<PaginationAndList> search(@RequestParam(required = false) String fullName,
+                                                    @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fromBirthDate,
+                                                    @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate toBirthDate,
+                                                    @RequestParam(required = false) Integer fromSatScore,
+                                                    @RequestParam(required = false) Integer toSatScore,
+                                                    @RequestParam(defaultValue = "1") Integer page,
+                                                    @RequestParam(defaultValue = "50") @Min(1) Integer count,
+                                                    @RequestParam(defaultValue = "id") StudentSortField sort, @RequestParam(defaultValue = "asc") SortDirection sortDirection) throws JsonProcessingException {
+
+        var res = studentService.search(fullName, fromBirthDate, toBirthDate, fromSatScore, toSatScore, page, count, sort, sortDirection);
+
+        return ResponseEntity.ok(res);
     }
+
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getOneStudent(@PathVariable Long id)

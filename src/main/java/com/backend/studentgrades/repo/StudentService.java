@@ -1,6 +1,7 @@
 package com.backend.studentgrades.repo;
 
 import com.backend.studentgrades.model.*;
+import com.backend.studentgrades.util.AWSService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.LocalDate;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import javax.validation.constraints.Min;
@@ -31,6 +33,9 @@ public class StudentService {
 
     @Autowired
     ObjectMapper om;
+
+    @Autowired
+    AWSService awsService;
 
 
     public PaginationAndList search(String fullName,
@@ -82,6 +87,12 @@ public class StudentService {
 
     public void delete(Student student) {
         repository.delete(student);
+    }
+
+    public AWSService uploadStudentPicture(MultipartFile image, String bucketPath) {
+        awsService.putInBucket(image, bucketPath);
+
+        return awsService;
     }
 
 }

@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Min;
 import java.util.Optional;
@@ -70,6 +71,18 @@ public class StudentController {
         if (dbStudent.isEmpty()) throw new RuntimeException("Student with id: " + id + " not found");
         studentService.delete(dbStudent.get());
         return new ResponseEntity<>("DELETED", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}/image", method = RequestMethod.PUT)
+    public ResponseEntity<?> uploadStudentImage(@PathVariable Long id,  @RequestParam("image") MultipartFile image)
+    {
+        Optional<Student> dbStudent = studentService.findById(id);
+        if (dbStudent.isEmpty()) throw new RuntimeException("Student with id: " + id + " not found");
+        String bucketPath = "apps/netanel/student-" +  id + ".png" ;
+        var awsService = studentService.uploadStudentPicture(image, bucketPath);
+        dbStudent.get().setProfilePicture(bucketPath);
+        Student updatedStudent = studentService.save(dbStudent.get());
+        return new ResponseEntity<>(StudentOut.of(updatedStudent, awsService) , HttpStatus.OK);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.backend.studentgrades.model;
 
+import com.backend.studentgrades.util.AWSService;
 import com.backend.studentgrades.util.Dates;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -84,5 +85,19 @@ public class StudentOut {
 
     public String getProfilePicture() {
         return profilepicture;
+    }
+
+    public static StudentOut of(Student student, AWSService awsService) {
+        StudentOut res = new StudentOut();
+        res.id = student.getId();
+        res.createdat = student.getCreatedAt();
+        res.fullname = student.getFullname();
+        res.birthdate = student.getBirthDate();
+        res.satscore = student.getSatScore();
+        res.graduationscore = student.getGraduationScore();
+        res.phone = student.getPhone();
+        res.profilepicture = awsService.generateLink(student.getProfilePicture());
+        res.avgscore = null;
+        return res;
     }
 }

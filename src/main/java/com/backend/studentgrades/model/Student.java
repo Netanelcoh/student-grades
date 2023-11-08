@@ -66,6 +66,10 @@ public class Student implements Serializable {
         return id;
     }
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
     public String getFullname() {
         return fullname;
     }

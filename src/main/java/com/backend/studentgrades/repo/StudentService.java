@@ -38,6 +38,7 @@ public class StudentService {
                                     LocalDate toBirthDate,
                                     Integer fromSatScore,
                                     Integer toSatScore,
+                                    Integer fromAvgScore,
                                     Integer page,
                                     Integer count,
                                     StudentSortField sort,
@@ -51,7 +52,9 @@ public class StudentService {
                         aFPSField().field("sat_score").alias("satscore").build(),
                         aFPSField().field("graduation_score").alias("graduationscore").build(),
                         aFPSField().field("phone").alias("phone").build(),
-                        aFPSField().field("profile_picture").alias("profilepicture").build()
+                        aFPSField().field("profile_picture").alias("profilepicture").build(),
+                        aFPSField().field("(select avg(sg.course_score) from  student_grade sg where sg.student_id = s.id ) ").alias("avgscore").build()
+
                 ))
                 .from(List.of(" student s"))
                 .conditions(List.of(
@@ -59,7 +62,8 @@ public class StudentService {
                         aFPSCondition().condition("( s.birth_Date >= :fromBirthDate )").parameterName("fromBirthDate").value(atUtc(fromBirthDate)).build(),
                         aFPSCondition().condition("( s.birth_Date <= :toBirthDate )").parameterName("toBirthDate").value(atUtc(toBirthDate)).build(),
                         aFPSCondition().condition("( sat_score >= :fromSatScore )").parameterName("fromSatScore").value(fromSatScore).build(),
-                        aFPSCondition().condition("( sat_score <= :toSatScore )").parameterName("toSatScore").value(toSatScore).build()
+                        aFPSCondition().condition("( sat_score <= :toSatScore )").parameterName("toSatScore").value(toSatScore).build(),
+                        aFPSCondition().condition("( (select avg(sg.course_score) from  student_grade sg where sg.student_id = s.id ) >= :fromAvgScore )").parameterName("fromAvgScore").value(fromAvgScore).build()
                 )).sortField(sort.fieldName).sortDirection(sortDirection).page(page).count(count)
                 .itemClass(StudentOut.class)
                 .build().exec(em, om);

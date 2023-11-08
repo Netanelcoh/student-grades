@@ -12,6 +12,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -50,6 +52,9 @@ public class Student implements Serializable {
     @Min(30)
     @Max(110)
     private Double graduationScore;
+
+    @OneToMany(mappedBy = "student", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private Collection<StudentGrade> studentGrades = new ArrayList<>();
 
     @Length(max = 20)
     private String phone;

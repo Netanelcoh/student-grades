@@ -28,11 +28,12 @@ public class StudentController {
                                                     @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate toBirthDate,
                                                     @RequestParam(required = false) Integer fromSatScore,
                                                     @RequestParam(required = false) Integer toSatScore,
+                                                    @RequestParam(required = false) Integer fromAvgScore,
                                                     @RequestParam(defaultValue = "1") Integer page,
                                                     @RequestParam(defaultValue = "50") @Min(1) Integer count,
                                                     @RequestParam(defaultValue = "id") StudentSortField sort, @RequestParam(defaultValue = "asc") SortDirection sortDirection) throws JsonProcessingException {
 
-        var res = studentService.search(fullName, fromBirthDate, toBirthDate, fromSatScore, toSatScore, page, count, sort, sortDirection);
+        var res = studentService.search(fullName, fromBirthDate, toBirthDate, fromSatScore, toSatScore, fromAvgScore, page, count, sort, sortDirection);
 
         return ResponseEntity.ok(res);
     }

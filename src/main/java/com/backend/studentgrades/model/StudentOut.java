@@ -40,6 +40,8 @@ public class StudentOut {
     private Integer satscore;
     private Double graduationscore;
 
+    private Double avgscore;
+
     private String phone;
     private String profilepicture;
 
@@ -49,6 +51,10 @@ public class StudentOut {
 
     public Double getGraduationScore() {
         return graduationscore;
+    }
+
+    public Double getAvgscore() {
+        return avgscore;
     }
 
     public Date getCreatedat() {

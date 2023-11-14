@@ -1,0 +1,27 @@
+version: "3"
+services:
+  postgres:
+    image: postgres
+    hostname: localhost
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+    - 5432:5432
+    volumes:
+      - ./postgresdata:/var/lib/postgresql/data
+    privileged: true
+    networks:
+      - spring-webapp-network
+
+  appserver:
+    container_name: server
+    build: .
+    ports:
+      - "8080:8080"
+    networks:
+      - spring-webapp-network
+
+networks:
+  spring-webapp-network:
+    driver: bridge
+

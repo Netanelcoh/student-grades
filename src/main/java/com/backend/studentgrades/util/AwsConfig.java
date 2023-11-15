@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
-public class AppConfig  {
+public class AwsConfig {
 
     @Autowired
     private Environment env;

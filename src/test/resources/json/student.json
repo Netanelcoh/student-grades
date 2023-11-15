@@ -1,0 +1,7 @@
+{
+  "birthDate": "1990-08-20",
+  "fullname": "{{fullName}}",
+  "graduationScore": {{graduationScore}},
+  "phone": "{{phone}}",
+  "satScore": {{satScore}}
+}
